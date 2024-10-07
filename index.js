@@ -1,32 +1,28 @@
 const express = require("express");
-const app = express();
-require("dotenv").config();
-const PORT = process.env.PORT || 5000;
 const cors = require("cors");
-const forntend_Url = process.env.Frontend_URL
-const stores = require("./store")
+require("dotenv").config();
+
+const PORT = process.env.PORT || 5000;
+const frontend_url = process.env.FRONTEND_URL;
+
+const stores = require("./store");
+
+const app = express();
 
 const corsOption = {
-    origin: forntend_Url,
+  origin: frontend_url,
 };
 
-//use Middleware
 app.use(cors(corsOption));
-app.use(express.json());
-app.use(express.urlencoded
-    ({ extended: true }));
 
-
-app.get("/api/stores/", (req, res) => {
-    res.json(stores);
+app.get("/api/stores", (req, res) => {
+  res.json(stores);
 });
 
 app.get("/", (req, res) => {
-    res.send("<h1>Hello FinancialTracker API</h1>");
+  res.send("<h1>Welcome to API for Store Delivery Zone Checker</h1>");
 });
 
-
-
 app.listen(PORT, () => {
-    console.log("Listenig to http://localhost:" + PORT);
+  console.log("Server running on port " + PORT);
 });

@@ -143,4 +143,4 @@ const stores = [ {
       "renovate": false,
       "direction": "https://www.google.com/maps/search/?api=1&query=13.82386751,100.03088504"
     }]
-    module.exports = stores
+  module.exports = stores;
