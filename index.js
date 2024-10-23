@@ -1,28 +1,47 @@
 const express = require("express");
-const cors = require("cors");
-require("dotenv").config();
-
-const PORT = process.env.PORT || 5000;
-const frontend_url = process.env.FRONTEND_URL;
-
-const stores = require("./store");
-
 const app = express();
+require("dotenv").config();
+const db = require("./models"); 
+const storeRoutes = require('./routers/store.router'); 
+const authRoutes = require('./routers/auth.routes'); // เพิ่ม auth routes
+const cors = require("cors");
+const PORT = process.env.PORT || 5000;
 
 const corsOption = {
-  origin: frontend_url,
+  origin: "http://localhost:5173",
 };
 
 app.use(cors(corsOption));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-app.get("/api/stores", (req, res) => {
-  res.json(stores);
-});
+app.use('/api', storeRoutes);
+app.use('/api/auth', authRoutes); // ใช้ auth routes
 
 app.get("/", (req, res) => {
-  res.send("<h1>Welcome to API for Store Delivery Zone Checker</h1>");
+  res.send("<h1>Hello FinancialTracker API</h1>");
 });
 
-app.listen(PORT, () => {
-  console.log("Server running on port " + PORT);
-});
+// ฟังก์ชันเพิ่ม role
+// const initRole = async () => {
+//   const existingRoles = await db.Role.findAll();
+//   if (existingRoles.length === 0) {
+//     await db.Role.create({ id: 1, name: "user" });
+//     await db.Role.create({ id: 2, name: "admin" });
+//   } else {
+//     console.log("Roles already exist.");
+//   }
+// };
+
+// Sync all models at once
+db.sequelize.sync({ alter: true })
+  .then(async () => {
+    console.log('All tables have been created or updated.');
+    // await initRole(); 
+    app.listen(PORT, () => {
+      console.log("Listening to http://localhost:" + PORT);
+    });
+  })
+  .catch((error) => {
+    console.error('Error creating or updating tables:', error);
+  });
