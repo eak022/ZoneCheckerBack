@@ -8,7 +8,7 @@ const cors = require("cors");
 const PORT = process.env.PORT || 5000;
 
 const corsOption = {
-  origin: "http://localhost:5173",
+  origin: "https://zone-checker-front.vercel.app",
 };
 
 app.use(cors(corsOption));
